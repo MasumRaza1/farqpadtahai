@@ -104,7 +104,7 @@ function Tape() {
 // ─── Input / Textarea ──────────────────────────────────────────────────────
 function FancyInput({ type = "text", placeholder, value, onChange, onFocus, onBlur, focused, multiline = false }) {
   const base = {
-    width: "100%", background: "transparent",
+    width: "100%",
     border: "2px solid #111", padding: "10px",
     fontFamily: "'Patrick Hand',cursive", fontSize: "1.05rem",
     transition: "all .2s", outline: "none",
