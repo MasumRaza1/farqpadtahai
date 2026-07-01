@@ -1,7 +1,7 @@
 function Footer() {
   return (
     <footer className="footer">
-      <p>© 2026 Fark Padta Hai. All rights reserved.</p>
+      <p>© 2026 Superboys of Rehla. All rights reserved.</p>
     
     </footer>
   );

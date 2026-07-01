@@ -1,7 +1,4 @@
-/* ── Google Fonts + FA must be in index.html ──────────────────────────────
-   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet"/>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-   ───────────────────────────────────────────────────────────────────────── */
+
 
 /* ── Design Tokens ── */
 :root {
@@ -185,3 +182,4 @@
   margin-top: 2px;
   transform: rotate(-1deg);
 }
+

@@ -509,9 +509,9 @@ export default function Home() {
 
         <div className="hero-text">
           <h1 className="hero-h1 reveal" ref={el => revealRef.current.push(el)} style={{ transitionDelay: '.1s' }}>
-            MUJHE,<br />
-            <span className="line2">FARAK</span><br />
-            PADTA HAI !
+            SABKA<br />
+            <span className="line2">MADADD</span><br />
+            HOGA
           </h1>
           <p className="hero-sub reveal" ref={el => revealRef.current.push(el)} style={{ transitionDelay: '.2s' }}>
             Donation ho to kya kuch nhi ho sakta<br />

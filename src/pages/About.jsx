@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import founderImage from './founder.png';
 import { Link } from "react-router-dom";
+import groupImage from './group.jpeg';
+import groupImageColor from './group-color.png';
 
 export default function About() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -265,7 +267,117 @@ export default function About() {
           box-shadow: var(--shadow-sm); transform: rotate(1deg);
         }
         .ps-arrow { font-size: 1.8rem; transform: scaleX(-1) rotate(-15deg); color: var(--black); }
+        /* ===== GROUP PHOTO SECTION ===== */
+.group-photo-section {
+  padding: 25px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.group-photo-frame {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: var(--white);
+  border: var(--border);
+  padding: 12px 12px 45px 12px;
+  box-shadow: var(--shadow-md);
+  transform: rotate(-1.5deg);
+}
+
+.group-photo-frame {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: var(--white);
+  border: var(--border);
+  padding: 12px 12px 45px 12px;
+  box-shadow: var(--shadow-md);
+  transform: rotate(-1.5deg);
+}
+
+.group-photo-imgwrap {
+  position: relative;
+  width: 100%;
+  border: 2px solid var(--black);
+  overflow: hidden;
+}
+
+.group-photo-imgwrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.group-photo-bw {
+  filter: grayscale(15%) contrast(105%);
+  transition: opacity 0.4s ease-in-out;
+}
+
+.group-photo-color {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.group-photo-frame:hover .group-photo-bw {
+  opacity: 0;
+}
+
+.group-photo-frame:hover .group-photo-color {
+  opacity: 1;
+}
+
+.group-photo-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(0.95rem, 4vw, 1.15rem);
+  letter-spacing: 1px;
+  color: var(--black);
+}
+
+.group-photo-badge {
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  background: var(--yellow);
+  border: 2px solid var(--black);
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bangers', cursive;
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.1;
+  transform: rotate(12deg);
+  box-shadow: var(--shadow-sm);
+  z-index: 5;
+}
       `}</style>
+{/* ===== GROUP PHOTO SECTION ===== */}
+      <section className="group-photo-section">
+        <div className="group-photo-frame">
+          <div className="tape tape-tl"></div>
+          <div className="tape tape-br"></div>
+          <div className="group-photo-badge">FULL<br/>SQUAD</div>
+         <div className="group-photo-imgwrap">
+  <img src={groupImage} alt="Superboys of Rehla Team" className="group-photo-bw" />
+  <img src={groupImageColor} alt="Superboys of Rehla Team Color" className="group-photo-color" />
+</div>
+          <div className="group-photo-caption">YEH RAHI PURI TEAM 🤝</div>
+        </div>
+      </section>
 
       {/* ===== HERO / FOUNDER SECTION ===== */}
       <section className="about-hero">

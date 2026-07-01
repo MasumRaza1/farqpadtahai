@@ -1,698 +1,696 @@
 import { useState, useEffect } from "react";
 
-// ─── Data ──────────────────────────────────────────────────────────────────
-const faqData = [
-  {
-    id: 1,
-    icon: "😠",
-    question: "NGO SCAM TOH NAHI?",
-    highlight: "SCAM",
-    answer:
-      "Bhai, yeh sawaal poochh ke tune humein prove karne ka mauka diya! Hum FCRA registered hain, audited hain, aur hamare accounts public domain mein hain. Scam waale itni transparency nahi dete. 😏",
-    badge: "RECEIPTS HAIN HAMARE PAAS 🧾",
-  },
-  {
-    id: 2,
-    icon: "💸",
-    question: "MERA ₹100 KYA HI KAREGA?",
-    highlight: "₹100",
-    answer:
-      "Bohot karega boss! Ek chai kam, ek life better. ₹100 se kisi bacche ki copy, kisi ki meal, ya kisi ka sapna thoda strong ho sakta hai. 🧡\n\nChhota amount nahi hota, chhoti soch hoti hai.",
-    badge: "100-100 JODKE HI TOH MOUNTAIN BANTA HAI! ⛰️",
-    defaultOpen: true,
-  },
-  {
-    id: 3,
-    icon: "📜",
-    question: "DONATION KA CERTIFICATE MILEGA?",
-    highlight: "CERTIFICATE",
-    answer:
-      "Haan bhai, 80G certificate milega — tax bachao aur desh bachao, ek saath! Email pe automatically bhejte hain, framing optional hai. 😎",
-    badge: "80G ✓  TAX SAVE ✓",
-  },
-  {
-    id: 4,
-    icon: "🔍",
-    question: "PAISA KAHAN USE HOTA HAI?",
-    highlight: "PAISA",
-    answer:
-      "Direct programs pe — education, health, livelihood. Overhead minimise karte hain kyunki hum jaante hain tumhara paisa office ki fancy chairs pe nahi, zaroori kaam pe jaana chahiye. Annual report public hai, dekho khud! 📊",
-    badge: "100% TRANSPARENT 👁️",
-  },
-  {
-    id: 5,
-    icon: "💻",
-    question: "AAP LOG ACTUALLY KAAM KARTE HO YA SIRF SOCIAL MEDIA?",
-    highlight: "ACTUALLY KAAM",
-    answer:
-      "Oof! Yeh toh laga. 😂 Haan, field mein bhi hain hum. Social media toh sirf proof hai, असली kaam tab hota hai jab camera band hota hai. Ground reports, case studies sab available hain.",
-    badge: "FIELD MEIN BHI, FEED MEIN BHI 🌾",
-  },
-  {
-    id: 6,
-    icon: "😎",
-    question: "FOUNDER RICH HAI KYA?",
-    highlight: "RICH",
-    answer:
-      "Rich? Bhai humne NGO join ki, startup nahi! 😂 Founder ka salary board-approved aur publicly disclosed hai. 'Rich' ka matlab alag hai yahan — impact se rich hain hum. 💪",
-    badge: "IMPACT RICH > CASH RICH 👑",
-  },
-  {
-    id: 7,
-    icon: "📅",
-    question: "KITNI BAAR FOLLOW-UP KAROGE?",
-    highlight: "FOLLOW-UP",
-    answer:
-      "Jitna tum chahoge! Monthly impact updates milenge. Zyada nahi bhejenge, kyunki hum jaante hain inbox ek sacred space hai. Unsubscribe ka option bhi hai — no guilt trip. 🙏",
-    badge: "SPAM-FREE PROMISE ✉️",
-  },
-  {
-    id: 8,
-    icon: "🙋",
-    question: "MAIN VOLUNTEER KARNA CHAHTA HOON, BUT TIME NAHI HAI. AB?",
-    highlight: "VOLUNTEER",
-    answer:
-      "Arre bhai, micro-volunteering hoti hai! 2 ghante bhi kafi hain mahine mein. Online tasks, content, mentoring — sab remote possible hai. Time nahi hai toh share karo, kyunki awareness bhi seva hai. 🫱",
-    badge: "2 HOURS = 1 DIFFERENCE ⏰",
-  },
+const PRAYERS = [
+  { name: "Fajar",   key: "fajar",   time: "4:15",  period: "AM", icon: "🌄", color: "#f59e0b", bg: "#fef3c7" },
+  { name: "Dhuhr",   key: "dhuhr",   time: "1:15",  period: "PM", icon: "☀️", color: "#10b981", bg: "#d1fae5" },
+  { name: "Asr",     key: "asr",     time: "5:30",  period: "PM", icon: "🌤", color: "#3b82f6", bg: "#dbeafe" },
+  { name: "Maghrib", key: "maghrib", time: "8:45",  period: "PM", icon: "🌅", color: "#f97316", bg: "#ffedd5" },
+  { name: "Isha",    key: "isha",    time: "10:15", period: "PM", icon: "🌙", color: "#8b5cf6", bg: "#ede9fe" },
 ];
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
-function highlightText(text, highlight) {
-  if (!highlight) return <>{text}</>;
-  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === highlight.toLowerCase() ? (
-          <span key={i} style={{ background: "#FFD600", padding: "0 3px", borderRadius: 3 }}>
-            {part}
-          </span>
-        ) : (
-          part
-        )
-      )}
-    </>
-  );
+const TRANSLATIONS = {
+  en: {
+    online: "Online",
+    current: "Current:",
+    next: "Next:",
+    left: "left",
+    timingTitle: "Muslim Prayer Timing",
+    dailySalat: "Daily Salat Times",
+    noticeSection: "Notice Section",
+    communityNotices: <>COMMUNITY<br/>NOTICES</>,
+    meetImam: "Meet Our Imam",
+    imamName: "Imam Dr. A. Rahman",
+    imamRole: "Head of Religious Affairs",
+    weatherSuffix: "Rehla, Palamu",
+    minaret: "Minaret",
+    prayers: "Prayers",
+    community: "Community",
+    donate: "Donate",
+    loadingHijri: "Loading Hijri...",
+    hijriUnavailable: "Hijri unavailable",
+    fajar: "Fajar",
+    dhuhr: "Dhuhr",
+    asr: "Asr",
+    maghrib: "Maghrib",
+    isha: "Isha",
+    fajarSub: "Sun rising",
+    dhuhrSub: "High Sun",
+    asrSub: "Sun low",
+    maghribSub: "Sunset",
+    ishaSub: "Moon & stars",
+    notices: [
+      "Friday Khutbah at 1:15 PM.",
+      "Eid-al-Adha Fundraising Dinner (details inside).",
+      "New Youth Program enrolling now.",
+    ],
+    // Donation Page Strings
+    donateTitle: "E-Donation Portal",
+    selectAmount: "Select Amount",
+    customAmount: "Custom Amount",
+    purpose: "Select Purpose",
+    masjidUpkeep: "Masjid Maintenance",
+    charitySadqah: "Charity & Sadqah",
+    payNow: "Proceed to Secure Pay",
+    bankTransfer: "Direct Bank Transfer",
+    accNumber: "Acc No:",
+    ifscCode: "IFSC:",
+    upiId: "UPI ID:",
+  },
+  hi: {
+    online: "ऑनलाइन",
+    current: "वर्तमान:",
+    next: "अगला:",
+    left: "शेष",
+    timingTitle: "मुस्लिम प्रार्थना समय",
+    dailySalat: "दैनिक नमाज़ समय",
+    noticeSection: "सूचना अनुभाग",
+    communityNotices: <>सामुदायिक<br/>सूचनाएं</>,
+    meetImam: "हमारे इमाम से मिलें",
+    imamName: "इमाम डॉ. ए. रहमान",
+    imamRole: "धार्मिक मामलों के प्रमुख",
+    weatherSuffix: "रेहला, पलामू",
+    minaret: "मीनार",
+    prayers: "नमाज़",
+    community: "समुदाय",
+    donate: "दान करें",
+    loadingHijri: "हिजरी लोड हो रहा है...",
+    hijriUnavailable: "हिजरी अनुपलब्ध",
+    fajar: "फज्र",
+    dhuhr: "जुहर",
+    asr: "असर",
+    maghrib: "मغرب",
+    isha: "ईша",
+    fajarSub: "सूर्योदय",
+    dhuhrSub: "दोपहर का सूर्य",
+    asrSub: "ढलता सूर्य",
+    maghribSub: "सूर्यास्त",
+    ishaSub: "चाँد और तारे",
+    notices: [
+      "शुक्रवार खुत्बा दोपहर 1:15 बजे।",
+      "ईद-उल-अज़हा फंडरेज़र डिनर (विवरण अंदर)।",
+      "नया युवा कार्यक्रम पंजीकरण चालू है।"
+    ],
+    donateTitle: "ई-शुकराना पोर्टल",
+    selectAmount: "राशि चुनें",
+    customAmount: "अन्य राशि दर्ज करें",
+    purpose: "दान का उद्देश्य",
+    masjidUpkeep: "मस्जिद रखरखाव",
+    charitySadqah: "दान और सदक़ा",
+    payNow: "सुरक्षित भुगतान करें",
+    bankTransfer: "सीधा बैंक ट्रांसफर",
+    accNumber: "खाता संख्या:",
+    ifscCode: "IFSC कोड:",
+    upiId: "UPI आईडी:",
+  },
+  ur: {
+    online: "آن لائن",
+    current: "موجودہ:",
+    next: "اگلا:",
+    left: "باقی",
+    timingTitle: "نماز کے اوقات",
+    dailySalat: "روزانہ نماز کے اوقات",
+    noticeSection: "نوٹس سیکشن",
+    communityNotices: <>برادری کے<br/>نوٹس</>,
+    meetImam: "ہمارے امام سے ملیں",
+    imamName: "امام ڈاکٹر اے رحمان",
+    imamRole: "سربراہ مذہبی امور",
+    weatherSuffix: "رحلہ، پلاموں",
+    minaret: "مینار",
+    prayers: "نمازیں",
+    community: "برادری",
+    donate: "عطیہ کریں",
+    loadingHijri: "ہجری لوڈ ہو رہی ہے...",
+    hijriUnavailable: "ہجری دستیاب نہیں",
+    fajar: "فجر",
+    dhuhr: "ظہر",
+    asr: "عصر",
+    maghrib: "مغرب",
+    isha: "عشاء",
+    fajarSub: "طلوعِ آفتاب",
+    dhuhrSub: "سردوپہر",
+    asrSub: "ڈھلتا سورج",
+    maghribSub: "غروبِ آفتاب",
+    ishaSub: "چاند اور تارے",
+    notices: [
+      "جمعہ کا خطبہ دوپہر 1:15 بجے ہوگا۔",
+      "عید الاضحیٰ فنڈ ریزنگ ڈنر (تفصیلات اندر)۔",
+      "نیا یوتھ پروگرام اب داخلہ جاری ہے۔"
+    ],
+    donateTitle: "آن لائن عطیات",
+    selectAmount: "رقم منتخب کریں",
+    customAmount: "رقم درج کریں",
+    purpose: "عطیہ کا مقصد",
+    masjidUpkeep: "مسجد کی دیکھ بھال",
+    charitySadqah: "صدقہ و خیرات",
+    payNow: "محفوظ ادائیگی کریں",
+    bankTransfer: "بینک اکاؤنٹ تفصیلات",
+    accNumber: "اکاؤنٹ نمبر:",
+    ifscCode: "IFSC کوڈ:",
+    upiId: "UPI آئی ڈی:",
+  }
+};
+
+const getWeatherIcon = (code) => {
+  if (code === 0) return "☀️";
+  if ([1, 2, 3].includes(code)) return "🌤️";
+  if ([45, 48].includes(code)) return "🌫️";
+  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return "🌧️";
+  if ([95, 96, 99].includes(code)) return "⛈️";
+  return "🌤️";
+};
+
+function getMinutesFromMidnight(timeStr, period) {
+  const [hoursStr, minutesStr] = timeStr.split(':');
+  let hours = parseInt(hoursStr, 10);
+  const minutes = parseInt(minutesStr, 10);
+
+  if (period === 'PM' && hours !== 12) hours += 12;
+  if (period === 'AM' && hours === 12) hours = 0;
+
+  return hours * 60 + minutes;
 }
 
-// ─── Sub-components ────────────────────────────────────────────────────────
-function Navbar({ donateClicked, onDonate }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <nav >
+export default function RazaMasjid() {
+  const [lang, setLang] = useState("en");
+  const [activeTab, setActiveTab] = useState("prayers");
+  const [digitalTime, setDigitalTime] = useState("");
+  const [currentPrayer, setCurrentPrayer] = useState("");
+  const [nextPrayerInfo, setNextPrayerInfo] = useState({ name: "", key: "", time: "", period: "", timeLeft: "" });
+  
+  const [islamicDate, setIslamicDate] = useState("");
+  const [weather, setWeather] = useState({ temp: "--", icon: "🌤️" });
+
+  // Donation interactive state configurations
+  const [donateAmount, setDonateAmount] = useState(500);
+  const [donationPurpose, setDonationPurpose] = useState("upkeep");
+
+  const t = TRANSLATIONS[lang];
+  const isRTL = lang === "ur";
+
+  const today = new Date();
+  const dayStr = today.toLocaleDateString(lang === "en" ? "en-US" : lang === "hi" ? "hi-IN" : "ur-PK", { weekday: "long" });
+  const dateStr = today.toLocaleDateString(lang === "en" ? "en-US" : lang === "hi" ? "hi-IN" : "ur-PK", { day: "numeric", month: "short", year: "numeric" });
+
+  useEffect(() => {
+    setIslamicDate(TRANSLATIONS[lang].loadingHijri);
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    
+    fetch(`https://api.aladhan.com/v1/gToH?date=${day}-${month}-${year}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.data && data.data.hijri) {
+          const h = data.data.hijri;
+          const monthLabel = lang === "en" ? h.month.en : (lang === "hi" ? h.month.en : h.month.ar);
+          setIslamicDate(`${h.day} ${monthLabel} ${h.year} AH`);
+        }
+      })
+      .catch(() => setIslamicDate(TRANSLATIONS[lang].hijriUnavailable));
+  }, [lang]);
+
+  useEffect(() => {
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=24.2123&longitude=83.8837&current=temperature_2m,weather_code")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.current) {
+          setWeather({
+            temp: Math.round(data.current.temperature_2m),
+            icon: getWeatherIcon(data.current.weather_code)
+          });
+        }
+      })
+      .catch(() => setWeather({ temp: "N/A", icon: "🌤️" }));
+  }, []);
+
+  useEffect(() => {
+    const updateTimeAndTracking = () => {
+      const now = new Date();
+      setDigitalTime(now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      let activeIdx = PRAYERS.length - 1; 
       
-    </nav>
-  );
-}
+      for (let i = 0; i < PRAYERS.length; i++) {
+        const prayerMinutes = getMinutesFromMidnight(PRAYERS[i].time, PRAYERS[i].period);
+        if (currentMinutes >= prayerMinutes) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
 
-function FAQCard({ item, isOpen, onToggle }) {
+      setCurrentPrayer(PRAYERS[activeIdx].name);
+
+      const nextIdx = (activeIdx + 1) % PRAYERS.length;
+      const next = PRAYERS[nextIdx];
+      
+      let nextMinutes = getMinutesFromMidnight(next.time, next.period);
+      let diff = 0;
+
+      if (nextIdx === 0 && currentMinutes > nextMinutes) {
+        diff = (1440 - currentMinutes) + nextMinutes;
+      } else {
+        diff = nextMinutes - currentMinutes;
+      }
+
+      const hLeft = Math.floor(diff / 60);
+      const mLeft = diff % 60;
+      setNextPrayerInfo({
+        name: next.name,
+        key: next.key,
+        time: next.time,
+        period: next.period,
+        timeLeft: hLeft > 0 ? `${hLeft}h ${mLeft}m` : `${mLeft}m`
+      });
+    };
+
+    updateTimeAndTracking();
+    const timer = setInterval(updateTimeAndTracking, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentPrayerActiveKey = PRAYERS.find(p => p.name === currentPrayer)?.key || "fajar";
+
   return (
-    <div
-      style={{
-        ...styles.faqItem,
-        boxShadow: isOpen ? "5px 5px 0 #1a1a1a" : "4px 4px 0 #1a1a1a",
-        animation: isOpen ? "wiggle 0.4s ease" : "none",
-      }}
-    >
-      {/* Question row */}
-      <div
-        onClick={onToggle}
-        style={styles.faqQ}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && onToggle()}
-        aria-expanded={isOpen}
-      >
-        <span style={styles.faqIcon}>{item.icon}</span>
-        <span style={styles.faqQText}>
-          {item.id}. {highlightText(item.question, item.highlight)}
-        </span>
-        <span
-          style={{
-            ...styles.faqToggle,
-            transform: isOpen ? "rotate(45deg)" : "none",
-          }}
-        >
-          +
-        </span>
-      </div>
-
-      {/* Answer — CSS max-height transition */}
-      <div
+    <div style={{
+      minHeight: "100vh",
+      background: "#1a1a1a",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      fontFamily: "'Segoe UI', system-ui, sans-serif",
+    }}>
+      <div 
+        dir={isRTL ? "rtl" : "ltr"}
         style={{
-          ...styles.faqAns,
-          maxHeight: isOpen ? 600 : 0,
-          padding: isOpen ? "0 14px 16px" : "0 14px",
+          width: "100%",
+          maxWidth: 390,
+          minHeight: "100vh",
+          background: "#1c1c1e",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
           overflow: "hidden",
-          transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s",
         }}
       >
-        <div style={styles.faqAnsInner}>
-          {item.id === 2 && (
-            <div style={styles.mountainNote}>
-              100-100 JODKE
-              <br />
-              HI TOH MOUNTAIN
-              <br />
-              BANTA HAI! ⛰️
+
+        {/* ── TOP NAV ── */}
+        <div style={{
+          background: "#2a2a2a",
+          padding: "14px 18px 12px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #333",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: "#3a3a3a",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 20,
+            }}>🕌</div>
+            <div>
+              <p style={{ color: "#fff", fontSize: 14, fontWeight: 700, margin: 0 }}>Raza Masjid</p>
+              <p style={{ color: "#4ade80", fontSize: 11, margin: 0, display: "flex", alignItems: "center", gap: 4 }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80", display: "inline-block" }}/>
+                {t.online}
+              </p>
             </div>
-          )}
-          <p style={{ whiteSpace: "pre-line" }}>{item.answer}</p>
-          <span style={styles.ansBadge}>{item.badge}</span>
+          </div>
+          
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            style={{
+              background: "#3a3a3a",
+              color: "#fff",
+              border: "1px solid #444",
+              borderRadius: "8px",
+              padding: "6px 10px",
+              fontSize: "12px",
+              fontWeight: "600",
+              cursor: "pointer",
+              outline: "none",
+              direction: "ltr"
+            }}
+          >
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="ur">اردو</option>
+          </select>
         </div>
+
+        {/* ── CONDITIONAL ROUTING ELEMENT ── */}
+        {activeTab !== "donate" ? (
+          <>
+            {/* ── VIEW A: PRAYERS/HOME DASHBOARD ── */}
+            {/* DATE HERO CARD */}
+            <div style={{
+              background: "#fff",
+              margin: "12px 12px 0 12px",
+              borderRadius: 18,
+              padding: "14px 12px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: "#111", margin: 0 }}>
+                    {dayStr}, {dateStr}
+                  </p>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: "#10b981", margin: "2px 0 0" }}>
+                    🌙 {islamicDate}
+                  </p>
+                </div>
+                
+                <div style={{ textAlign: isRTL ? "left" : "right" }}>
+                  <p style={{ fontSize: 15, fontWeight: 700, color: "#111", margin: 0, fontFamily: "monospace", letterSpacing: "0.5px" }}>
+                    {digitalTime || "00:00:00"}
+                  </p>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: isRTL ? "flex-start" : "flex-end", gap: 4, margin: "2px 0 0" }}>
+                    <span style={{ fontSize: 11 }}>{weather.icon}</span>
+                    <span style={{ fontSize: 10, color: "#6b7280", fontWeight: 600 }}>
+                      {weather.temp}°C • {t.weatherSuffix}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: "#f3f4f6",
+                borderRadius: 12,
+                padding: "10px 12px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border: "1px solid #e5e7eb",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 10, textTransform: "uppercase", color: "#6b7280", fontWeight: 700, letterSpacing: "0.5px" }}>{t.current}</span>
+                  <span style={{ fontSize: 12, fontWeight: 800, color: "#15803d" }}>{t[currentPrayerActiveKey]}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: "#374151" }}>
+                  <span>{t.next} <strong style={{ color: "#111" }}>{t[nextPrayerInfo.key] || "—"}</strong> ({nextPrayerInfo.time} {nextPrayerInfo.period})</span>
+                  <span style={{
+                    background: "#ef4444",
+                    padding: "2px 6px",
+                    borderRadius: 4,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    color: "#fff",
+                    boxShadow: "0 2px 4px rgba(239, 68, 68, 0.2)"
+                  }}>
+                    {nextPrayerInfo.timeLeft} {t.left}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION TITLE */}
+            <div style={{ background: "#1c1c1e", padding: "16px 20px 4px", textAlign: "center" }}>
+              <p style={{ color: "#fff", fontSize: 18, fontWeight: 800, margin: 0, letterSpacing: 0.3 }}>
+                {t.timingTitle}
+              </p>
+            </div>
+
+            {/* MAIN DATA GRID */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, flex: 1, background: "#1c1c1e" }}>
+              {/* LEFT: Salat Times */}
+              <div style={{
+                background: "#fff",
+                margin: isRTL ? "12px 12px 12px 6px" : "12px 6px 12px 12px",
+                borderRadius: 18,
+                padding: "14px 12px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+              }}>
+                <p style={{ fontSize: 9, fontWeight: 800, color: "#888", letterSpacing: 1.5, textTransform: "uppercase", margin: "0 0 6px" }}>
+                  {t.dailySalat}
+                </p>
+
+                {PRAYERS.map((p, index) => {
+                  const isActive = currentPrayer === p.name;
+                  const isLast = index === PRAYERS.length - 1;
+                  return (
+                    <div key={p.name} style={{
+                      display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", margin: "0 -4px",
+                      borderBottom: isLast && isActive ? "none" : (isActive ? "none" : "1px solid #f3f4f6"),
+                      backgroundColor: isActive ? "#dcfce7" : "transparent",
+                      borderRadius: isActive ? "12px" : "0",
+                      boxShadow: isActive ? "0 2px 4px rgba(0,0,0,0.05)" : "none",
+                      border: isActive ? "1px solid #bbf7d0" : "1px solid transparent",
+                    }}>
+                      <div style={{ width: 32, height: 32, borderRadius: 10, background: p.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
+                        {p.icon}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: isActive ? "#166534" : "#111", margin: 0 }}>{t[p.key]}</p>
+                        <p style={{ fontSize: 10, color: isActive ? "#15803d" : "#9ca3af", margin: 0 }}>{t[`${p.key}Sub`]}</p>
+                      </div>
+                      <div style={{ textAlign: isRTL ? "left" : "right" }}>
+                        <p style={{ fontSize: 15, fontWeight: 800, color: isActive ? "#166534" : "#111", margin: 0, lineHeight: 1 }}>{p.time}</p>
+                        <p style={{ fontSize: 10, color: isActive ? "#15803d" : "#6b7280", margin: 0 }}>{p.period}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* RIGHT: Notices */}
+              <div style={{
+                background: "#fff",
+                margin: isRTL ? "12px 6px 12px 12px" : "12px 12px 12px 6px",
+                borderRadius: 18,
+                padding: "14px 12px",
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 10 }}>
+                  <p style={{ fontSize: 9, fontWeight: 800, color: "#888", letterSpacing: 1.5, textTransform: "uppercase", margin: 0 }}>{t.noticeSection}</p>
+                  <span style={{ fontSize: 14 }}>🔔</span>
+                </div>
+                <p style={{ fontSize: 20, fontWeight: 900, color: "#111", margin: "0 0 10px", lineHeight: 1.2 }}>{t.communityNotices}</p>
+                <ul style={{ margin: 0, paddingProps: 0, paddingRight: isRTL ? 14 : 0, paddingLeft: isRTL ? 0 : 14, display: "flex", flexDirection: "column", gap: 10 }}>
+                  {t.notices.map((notice, i) => (
+                    <li key={i} style={{ fontSize: 12, color: "#374151", lineHeight: 1.45, fontWeight: 500 }}>{notice}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* IMAM CARD */}
+            <div style={{
+              background: "#fff",
+              margin: "0 12px 12px",
+              borderRadius: 18,
+              padding: "16px 18px",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+            }}>
+              <div style={{ width: 64, height: 64, borderRadius: 14, background: "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, flexShrink: 0, overflow: "hidden", border: "2px solid #e5e7eb" }}>
+                👳
+              </div>
+              <div>
+                <p style={{ fontSize: 10, fontWeight: 700, color: "#9ca3af", letterSpacing: 1.5, textTransform: "uppercase", margin: "0 0 3px" }}>{t.meetImam}</p>
+                <p style={{ fontSize: 18, fontWeight: 900, color: "#111", margin: "0 0 2px", lineHeight: 1.2 }}>{t.imamName}</p>
+                <p style={{ fontSize: 12, color: "#6b7280", margin: 0 }}>{t.imamRole}</p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* ── VIEW B: E-DONATION VIEW (SAME UI, CLEAN & SCANNABLE) ── */}
+            <div style={{ background: "#1c1c1e", padding: "16px 20px 4px", textAlign: "center" }}>
+              <p style={{ color: "#fff", fontSize: 18, fontWeight: 800, margin: 0, letterSpacing: 0.3 }}>
+                {t.donateTitle}
+              </p>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "0 12px", flex: 1 }}>
+              
+              {/* CARD 1: Amount Grid Panel */}
+              <div style={{
+                background: "#fff",
+                borderRadius: 18,
+                padding: "16px 14px",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+              }}>
+                <p style={{ fontSize: 10, fontWeight: 800, color: "#888", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 12px" }}>
+                  {t.selectAmount}
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 12 }}>
+                  {[200, 500, 1000].map((amt) => (
+                    <button
+                      key={amt}
+                      onClick={() => setDonateAmount(amt)}
+                      style={{
+                        padding: "10px 0",
+                        borderRadius: 10,
+                        border: donateAmount === amt ? "2px solid #16a34a" : "1px solid #e5e7eb",
+                        background: donateAmount === amt ? "#dcfce7" : "#f9fafb",
+                        color: donateAmount === amt ? "#15803d" : "#374151",
+                        fontSize: 14,
+                        fontWeight: "700",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      ₹{amt}
+                    </button>
+                  ))}
+                </div>
+                <input 
+                  type="number"
+                  placeholder={t.customAmount}
+                  value={donateAmount}
+                  onChange={(e) => setDonateAmount(Number(e.target.value))}
+                  style={{
+                    width: "100%",
+                    boxSizing: "border-box",
+                    padding: "10px 12px",
+                    borderRadius: 10,
+                    border: "1px solid #e5e7eb",
+                    background: "#f9fafb",
+                    fontSize: 13,
+                    color: "#111",
+                    fontWeight: "600",
+                    outline: "none",
+                    textAlign: isRTL ? "right" : "left"
+                  }}
+                />
+              </div>
+
+              {/* CARD 2: Purpose Picker Panel */}
+              <div style={{
+                background: "#fff",
+                borderRadius: 18,
+                padding: "16px 14px",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+              }}>
+                <p style={{ fontSize: 10, fontWeight: 800, color: "#888", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 12px" }}>
+                  {t.purpose}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {[
+                    { id: "upkeep", label: t.masjidUpkeep, icon: "🛠️" },
+                    { id: "charity", label: t.charitySadqah, icon: "🤲" }
+                  ].map((p) => (
+                    <div 
+                      key={p.id}
+                      onClick={() => setDonationPurpose(p.id)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        padding: "12px",
+                        borderRadius: 12,
+                        border: donationPurpose === p.id ? "1px solid #bbf7d0" : "1px solid #f3f4f6",
+                        background: donationPurpose === p.id ? "#f0fdf4" : "#f9fafb",
+                        cursor: "pointer"
+                      }}
+                    >
+                      <span style={{ fontSize: 16 }}>{p.icon}</span>
+                      <span style={{ fontSize: 13, fontWeight: "600", color: donationPurpose === p.id ? "#166534" : "#374151", flex: 1 }}>
+                        {p.label}
+                      </span>
+                      <input 
+                        type="radio" 
+                        checked={donationPurpose === p.id} 
+                        readOnly
+                        style={{ accentColor: "#16a34a" }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CARD 3: Account/Direct Transfer Data info */}
+              <div style={{
+                background: "#fff",
+                borderRadius: 18,
+                padding: "14px 14px",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 4
+              }}>
+                <p style={{ fontSize: 10, fontWeight: 800, color: "#888", letterSpacing: 1, textTransform: "uppercase", margin: "0 0 4px" }}>
+                  {t.bankTransfer}
+                </p>
+                <p style={{ fontSize: 12, color: "#4b5563", margin: 0, fontWeight: "500" }}>
+                  <strong>{t.accNumber}</strong> 123456789012 • SBI
+                </p>
+                <p style={{ fontSize: 12, color: "#4b5563", margin: 0, fontWeight: "500" }}>
+                  <strong>{t.ifscCode}</strong> SBIN0001234
+                </p>
+                <p style={{ fontSize: 12, color: "#4b5563", margin: 0, fontWeight: "500" }}>
+                  <strong>{t.upiId}</strong> razamasjid@upi
+                </p>
+              </div>
+
+              {/* ACTION PAY BUTTON */}
+              <button style={{
+                width: "100%",
+                background: "linear-gradient(135deg, #16a34a, #15803d)",
+                color: "#fff",
+                border: "none",
+                borderRadius: 14,
+                padding: "14px 0",
+                fontSize: 14,
+                fontWeight: "700",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(22, 163, 74, 0.2)",
+                marginBottom: 16
+              }}>
+                {t.payNow} (₹{donateAmount || 0})
+              </button>
+
+            </div>
+          </>
+        )}
+
+        {/* ── BOTTOM NAV ── */}
+        <div style={{
+          background: "#fff",
+          borderTop: "1px solid #e5e7eb",
+          display: "flex",
+          padding: "8px 0 16px",
+          zIndex: 10
+        }}>
+          {[
+            { key: "minaret",   label: t.minaret,   icon: "🕌" },
+            { key: "prayers",   label: t.prayers,   icon: "🤲" },
+            { key: "community", label: t.community, icon: "👥" },
+            { key: "donate",    label: t.donate,    icon: "💝" },
+          ].map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                flex: 1, background: "none", border: "none", cursor: "pointer",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+                padding: "6px 0",
+              }}
+            >
+              <span style={{ fontSize: 22 }}>{tab.icon}</span>
+              <span style={{
+                fontSize: 11, fontWeight: 600,
+                color: activeTab === tab.key ? "#16a34a" : "#9ca3af",
+              }}>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
       </div>
     </div>
   );
 }
-
-// ─── Page ──────────────────────────────────────────────────────────────────
-export default function FAQPage() {
-  const [openId, setOpenId] = useState(2); // Q2 open by default
-  const [donateClicked, setDonateClicked] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleDonate = () => {
-    setDonateClicked(true);
-    setTimeout(() => setDonateClicked(false), 1800);
-  };
-
-  const handleToggle = (id) => {
-    setOpenId((prev) => (prev === id ? null : id));
-  };
-
-  return (
-    <>
-      {/* Global styles injected via style tag — avoids needing a CSS module */}
-      <style>{globalCSS}</style>
-
-      <div style={styles.page}>
-        {/* NAVBAR */}
-        <Navbar donateClicked={donateClicked} onDonate={handleDonate} />
-
-        {/* HERO */}
-        <section style={styles.hero}>
-          <div style={styles.sideNoteLeft}>
-            SAWAAL
-            <br />
-            ACHHE HAIN,
-            <br />
-            ISLIYE HUM
-            <br />
-            YAHAN HAIN!
-            <span style={{ fontSize: "1.4rem", display: "block" }}>↙️</span>
-          </div>
-
-          <div style={styles.sideNoteRight}>
-            <div style={styles.trustBadge}>TRUST ISSUES</div>
-            <br />
-            NORMAL HAI BRO,
-            <br />
-            SAWAAL KARO!
-            <span style={{ fontSize: "1.4rem", display: "block" }}>↘️</span>
-          </div>
-
-          <div style={{ marginTop: 10 }}>
-            <span style={{ fontSize: "3.5rem" }}>😤</span>
-          </div>
-
-          <h1 style={styles.faqTitle}>FAQ</h1>
-
-          <div style={styles.subtitleBadge}>(FREQUENTLY ASKED, HONESTLY ANSWERED)</div>
-
-          <p style={styles.heroDesc}>
-            Aap poochho, hum sach sach batayenge.
-            <br />
-            Yahan corporate gyaan nahi, real baatein hoti hain. 😎
-          </p>
-        </section>
-
-        {/* FAQ LIST */}
-        <div
-          style={styles.faqList}
-          className={mounted ? "fade-in" : ""}
-        >
-          {faqData.map((item) => (
-            <FAQCard
-              key={item.id}
-              item={item}
-              isOpen={openId === item.id}
-              onToggle={() => handleToggle(item.id)}
-            />
-          ))}
-        </div>
-
-        {/* STICKY NOTES ROW */}
-        <div style={styles.stickyRow}>
-          <div style={{ ...styles.stickyNote, flexShrink: 0, textAlign: "center", fontSize: "1.1rem", padding: "12px 16px" }}>
-            HONESTY
-            <br />
-            100%
-            <br />
-            DRAMA
-            <br />
-            0%
-            <br />
-            😊
-          </div>
-          <div style={{ ...styles.stickyNote, flex: 1, fontSize: "0.85rem" }}>
-            HUMARA FORMULA:
-            <ul style={{ listStyle: "none", marginTop: 4 }}>
-              {["TRANSPARENCY", "IMPACT", "ACCOUNTABILITY", "THODA SARCASM (FOR YOUR ENTERTAINMENT) 😎"].map((i) => (
-                <li key={i}>✓ {i}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* DEAL ROW */}
-        <div style={styles.dealRow}>
-          DEAL?
-          <span className="shake" style={{ fontSize: "2.5rem", display: "block" }}>
-            🤝
-          </span>
-        </div>
-
-        {/* BOTTOM CTA */}
-        <section style={styles.ctaSection}>
-          <span style={{ fontSize: "4rem", marginBottom: 8, display: "block" }}>😄</span>
-          <div style={styles.ctaTitle}>
-            AUR BHI{" "}
-            <span style={{ textDecoration: "underline", textDecorationStyle: "wavy", textDecorationColor: "#FFD600" }}>
-              DOUBT
-            </span>{" "}
-            HAI?
-          </div>
-          <p style={styles.ctaSub}>Humein ping maro, hum reply zaroor denge.</p>
-          <a href="mailto:hello@farakpadthai.org" style={styles.btnAsk}>
-            ASK US ANYTHING{" "}
-            <span className="fly" style={{ fontSize: "1.2rem" }}>
-              ✈️
-            </span>
-          </a>
-        </section>
-
-        {/* FOOTER TAGLINE */}
-        <div style={styles.footerTagline}>
-          <p style={{ fontFamily: "'Bangers', cursive", fontSize: "1.1rem", letterSpacing: "1.5px", marginBottom: 6 }}>
-            DOUBT KARNA THEEK HAI,
-          </p>
-          <span style={styles.highlightLine}>FARAK PADNA AUR BHI THEEK HAI. 👑</span>
-          <span className="heartbeat" style={{ fontSize: "1.5rem", display: "block", marginTop: 10 }}>
-            🖤
-          </span>
-        </div>
-
-        {/* BOTTOM NAV */}
-        
-      </div>
-    </>
-  );
-}
-
-// ─── Styles ────────────────────────────────────────────────────────────────
-const B = "2.5px solid #1a1a1a";
-const R = 14;
-
-const styles = {
-  page: {
-    background: "#fafaf5",
-    color: "#1a1a1a",
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: 16,
-    lineHeight: 1.5,
-    maxWidth: 480,
-    margin: "0 auto",
-    overflowX: "hidden",
-    position: "relative",
-  },
-  nav: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "14px 18px",
-    borderBottom: B,
-    background: "#fafaf5",
-    position: "sticky",
-    top: 0,
-    zIndex: 100,
-  },
-  logo: {
-    textDecoration: "none",
-    color: "#1a1a1a",
-    display: "block",
-  },
-  btnDonate: {
-    background: "#1a1a1a",
-    color: "#fafaf5",
-    border: B,
-    borderRadius: 8,
-    padding: "7px 14px",
-    fontFamily: "'Bangers', cursive",
-    fontSize: "1rem",
-    letterSpacing: 1.5,
-    cursor: "pointer",
-    boxShadow: "3px 3px 0 #555",
-    transition: "transform 0.1s, box-shadow 0.1s",
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-  },
-  hamburger: {
-    width: 32,
-    height: 28,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    padding: "4px 0",
-    background: "none",
-    border: "none",
-  },
-  ham1: {
-    display: "block",
-    height: 3,
-    background: "#1a1a1a",
-    borderRadius: 2,
-    transition: "transform 0.3s, opacity 0.3s",
-    width: "100%",
-  },
-  hero: {
-    padding: "30px 18px 10px",
-    textAlign: "center",
-    position: "relative",
-  },
-  sideNoteLeft: {
-    position: "absolute",
-    left: 8,
-    top: 28,
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "0.82rem",
-    fontWeight: 700,
-    lineHeight: 1.3,
-    textAlign: "left",
-    maxWidth: 90,
-    transform: "rotate(-3deg)",
-  },
-  sideNoteRight: {
-    position: "absolute",
-    right: 8,
-    top: 28,
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "0.82rem",
-    fontWeight: 700,
-    lineHeight: 1.3,
-    textAlign: "center",
-    maxWidth: 90,
-    transform: "rotate(3deg)",
-  },
-  trustBadge: {
-    background: "#FFD600",
-    border: B,
-    borderRadius: 6,
-    padding: "4px 8px",
-    fontFamily: "'Bangers', cursive",
-    letterSpacing: 1,
-    fontSize: "0.78rem",
-    display: "inline-block",
-    marginBottom: 4,
-  },
-  faqTitle: {
-    fontFamily: "'Bangers', cursive",
-    fontSize: "5rem",
-    letterSpacing: 4,
-    lineHeight: 0.9,
-    position: "relative",
-    display: "inline-block",
-    margin: "10px 0 6px",
-  },
-  subtitleBadge: {
-    background: "#FFD600",
-    border: B,
-    borderRadius: 20,
-    padding: "5px 16px",
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "0.85rem",
-    letterSpacing: 1,
-    display: "inline-block",
-    margin: "6px 0 14px",
-  },
-  heroDesc: {
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "1rem",
-    color: "#333",
-    lineHeight: 1.5,
-    maxWidth: 280,
-    margin: "0 auto 10px",
-  },
-  faqList: {
-    padding: "10px 14px 20px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-  },
-  faqItem: {
-    border: B,
-    borderRadius: R,
-    background: "#fafaf5",
-    overflow: "hidden",
-    transition: "box-shadow 0.15s",
-  },
-  faqQ: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    padding: 14,
-    cursor: "pointer",
-    userSelect: "none",
-  },
-  faqIcon: {
-    fontSize: "1.8rem",
-    flexShrink: 0,
-    width: 36,
-    textAlign: "center",
-  },
-  faqQText: {
-    flex: 1,
-    fontFamily: "'Bangers', cursive",
-    fontSize: "1.05rem",
-    letterSpacing: 0.5,
-    lineHeight: 1.25,
-  },
-  faqToggle: {
-    fontSize: "1.4rem",
-    fontWeight: 900,
-    lineHeight: 1,
-    color: "#1a1a1a",
-    flexShrink: 0,
-    transition: "transform 0.3s",
-    width: 24,
-    textAlign: "center",
-  },
-  faqAns: {
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "0.95rem",
-    lineHeight: 1.6,
-    color: "#222",
-  },
-  faqAnsInner: {
-    paddingTop: 8,
-    borderTop: "1.5px dashed #aaa",
-    position: "relative",
-  },
-  mountainNote: {
-    background: "#FFF176",
-    border: B,
-    borderRadius: 8,
-    padding: "6px 12px",
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "0.85rem",
-    textAlign: "center",
-    float: "right",
-    margin: "0 0 8px 10px",
-    transform: "rotate(2deg)",
-    maxWidth: 120,
-    lineHeight: 1.3,
-  },
-  ansBadge: {
-    background: "#FFD600",
-    border: B,
-    borderRadius: 8,
-    padding: "4px 10px",
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "0.8rem",
-    display: "inline-block",
-    margin: "6px 0 4px",
-    transform: "rotate(-2deg)",
-  },
-  stickyRow: {
-    margin: "4px 14px",
-    display: "flex",
-    gap: 10,
-  },
-  stickyNote: {
-    background: "#FFD600",
-    border: B,
-    borderRadius: 6,
-    padding: "12px 14px",
-    boxShadow: "3px 3px 0 #1a1a1a",
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "1rem",
-    lineHeight: 1.3,
-    position: "relative",
-  },
-  dealRow: {
-    margin: "4px 14px",
-    textAlign: "center",
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "1.2rem",
-  },
-  ctaSection: {
-    margin: 14,
-    border: B,
-    borderRadius: R,
-    borderStyle: "dashed",
-    padding: "20px 16px",
-    textAlign: "center",
-    background: "#fffde7",
-  },
-  ctaTitle: {
-    fontFamily: "'Bangers', cursive",
-    fontSize: "1.6rem",
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  ctaSub: {
-    fontFamily: "'Patrick Hand', cursive",
-    fontStyle: "italic",
-    fontSize: "0.95rem",
-    marginBottom: 16,
-    color: "#444",
-  },
-  btnAsk: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 8,
-    background: "#1a1a1a",
-    color: "#fafaf5",
-    border: B,
-    borderRadius: 10,
-    padding: "13px 28px",
-    fontFamily: "'Bangers', cursive",
-    fontSize: "1.2rem",
-    letterSpacing: 2,
-    cursor: "pointer",
-    boxShadow: "4px 4px 0 #555",
-    textDecoration: "none",
-    transition: "transform 0.1s, box-shadow 0.1s",
-  },
-  footerTagline: {
-    padding: "24px 18px 12px",
-    textAlign: "center",
-  },
-  highlightLine: {
-    background: "#FFD600",
-    border: B,
-    borderRadius: 6,
-    padding: "5px 14px",
-    display: "inline-block",
-    fontFamily: "'Bangers', cursive",
-    fontSize: "1.1rem",
-    letterSpacing: 1.5,
-  },
-  bottomNav: {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    borderTop: B,
-    padding: "10px 0",
-    background: "#fafaf5",
-    position: "sticky",
-    bottom: 0,
-    zIndex: 100,
-  },
-  bottomNavLink: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 3,
-    fontFamily: "'Patrick Hand', cursive",
-    fontWeight: 700,
-    fontSize: "0.72rem",
-    color: "#1a1a1a",
-    textDecoration: "none",
-    letterSpacing: 0.5,
-    padding: "4px 8px",
-    borderRadius: 8,
-    transition: "background 0.15s",
-  },
-};
-
-// ─── Global CSS (keyframes + Google Fonts) ─────────────────────────────────
-const globalCSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Patrick Hand:wght@400;700&family=Patrick+Hand&display=swap');
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0.5;
-  }
-
-  @keyframes wiggle {
-    0%   { transform: rotate(0); }
-    20%  { transform: rotate(-2deg); }
-    40%  { transform: rotate(2deg); }
-    60%  { transform: rotate(-1deg); }
-    80%  { transform: rotate(1deg); }
-    100% { transform: rotate(0); }
-  }
-  @keyframes shake {
-    0%, 100% { transform: rotate(0deg); }
-    25%       { transform: rotate(-8deg); }
-    75%       { transform: rotate(8deg); }
-  }
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    14%       { transform: scale(1.3); }
-    28%       { transform: scale(1); }
-    42%       { transform: scale(1.3); }
-    70%       { transform: scale(1); }
-  }
-  @keyframes fly {
-    from { transform: translateX(0) rotate(-10deg); }
-    to   { transform: translateX(6px) rotate(10deg); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .shake    { animation: shake 1.5s ease-in-out infinite; }
-  .heartbeat{ animation: heartbeat 1.4s ease infinite; }
-  .fly      { display: inline-block; animation: fly 2s ease-in-out infinite alternate; }
-  .fade-in > * { animation: fadeUp 0.5s ease both; }
-  .fade-in > *:nth-child(1)  { animation-delay: 0.00s; }
-  .fade-in > *:nth-child(2)  { animation-delay: 0.05s; }
-  .fade-in > *:nth-child(3)  { animation-delay: 0.10s; }
-  .fade-in > *:nth-child(4)  { animation-delay: 0.15s; }
-  .fade-in > *:nth-child(5)  { animation-delay: 0.20s; }
-  .fade-in > *:nth-child(6)  { animation-delay: 0.25s; }
-  .fade-in > *:nth-child(7)  { animation-delay: 0.30s; }
-  .fade-in > *:nth-child(8)  { animation-delay: 0.35s; }
-`;
