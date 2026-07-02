@@ -387,12 +387,12 @@ export default function About() {
         
         <div className="hero-top-area">
           <div className="hero-text-col">
-            <h1 className="hero-title">
-              EK LAUNDA THA,<br />
-              JISNE SOCHA KUCH <span className="hl-yellow">FARAK</span><br />
-              PADNA CHAIYE
-            </h1>
-            <p className="hero-sub">BAS, <span className="hl-black">NGO</span> BAN GYA</p>
+          <h1 className="hero-title">
+  KUCH LAUNDE THE,<br />
+  JINHE LAGA KUCH <span className="hl-yellow">FARAK</span><br />
+  PADNA CHAIYE
+</h1>
+<p className="hero-sub">TOH BAS, <span className="hl-black">NGO</span> BAN GYA</p>
             <i className="fa-regular fa-lightbulb doodle-bulb"></i>
           </div>
 
@@ -441,7 +441,7 @@ NOW BOTH SYSTEMS NEED DEBUGGING
       {/* ===== STORY SECTION ===== */}
       <section className="story-section" id="story">
         <div className="story-header">
-          <div className="badge-black">MERI KAHANI (SHORT ME)</div>
+          <div className="badge-black">HUMARI KAHANI (SHORT ME)</div>
           <div className="dashed-line">
             <i className="fa-solid fa-bolt"></i>
           </div>
@@ -454,10 +454,10 @@ GOOGLE KAR LENGE<br />
 PAR RUKENGE NHI 😎
           </div>
           
-          Ek Din Chai Peete Peete Socha,
+          Ek Din Sab Chai Peete Peete Bole,
 "Yaar, Sabko Problem Pata Hai... Solution Ka Kya?"<br />
 
-Phir Wahi Kiya Jo Har Confused Engineer Karta Hai:
+Phir Wahi Kiya Jo Har Confused Engineering Batch Karta Hai:
 Overthink Kiya... Aur NGO Bana Liya. 😌<br /><br />
 
 Tab Se Koshish Jaari Hai —

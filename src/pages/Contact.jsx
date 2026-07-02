@@ -29,7 +29,7 @@ const CONTACT_DETAILS = [
         Kyunki humaare paas real kabootar afford karne ke paise nahi bache:{" "}
         <br />
         <span style={{ background: "#111", color: "#FFD600", fontFamily: "'Bangers',cursive", fontSize: "1.1rem", letterSpacing: 0.8, borderRadius: 4, padding: "4px 8px", marginTop: 6, display: "inline-block" }}>
-          dukh-dard@farqpadthai.org
+          dukh-dard@superboysofrehla.org
         </span>
         <br />
         NGO chala rahe hain, Empire nahi 😭
